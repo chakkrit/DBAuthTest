@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>Profile of[% user.username %]</title>
+  </head>
+  <body>
+    [%# Simple column set %]
+    [% FOREACH col = users_rs.result_source.columns %]
+      <div>
+        <span>[% col %]</span>
+        <span>[% user.$col %]</span>
+      </div>
+    [% END %]
+  </body>
+</html>

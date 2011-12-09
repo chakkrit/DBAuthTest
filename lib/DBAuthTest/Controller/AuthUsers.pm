@@ -43,12 +43,42 @@ sub add : Chained('base'): PathPart('add'): Args(0) {
       email => $params->{email},
       password => $params->{password},
     }) };
+    
     if($@) {
       $c->log->debug("User tried to sign up with an invalid email address, redoing.. ");
+
       $c->stash( errors => { email => 'invalid' }, err => $@);
-      return $c->res->redirect( $c->uri_for( $c->controller('AuthUser')->action_for('profile'), [ $newuser->id ] ) );
+
+      return;
     }
+
+    return $c->res->redirect( $c->uri_for( $c->controller('AuthUsers')->action_for('profile'), [ $newuser->id ] ) );
   }
+}
+
+=head2 user
+
+=cut
+
+sub user : Chained('base'): PathPart(''): CaptureArgs(1) {
+  my ($self, $c, $userid) = @_;
+  if($userid =~ /\D/){
+    die "Misuse of URL, userid does not contain only digit!"
+  }
+  my $user = $c->stash->{users_rs}->find({id => $userid}, {key => 'primary'});
+
+  die "No such user" if(!$user);
+
+  $c->stash(user => $user);
+}
+
+=head2 profile
+
+=cut
+
+sub profile : Chained('user') :PathPart('profile'): Args(0) {
+  my ($self, $c) = @_;
+
 }
 
 =head1 AUTHOR
