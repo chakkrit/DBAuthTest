@@ -1,0 +1,10 @@
+<html>
+  <head>
+    <title>Add user</title>
+  </head>
+  <body>
+    <form action = "[% c.uri_for(c.controller('AuthUsers').action_for('add')) %]" method="post">
+    [%# Simple column set %]
+    [% FOREACH col = users_rs.result_source.columns %]
+  </body>
+</html>
