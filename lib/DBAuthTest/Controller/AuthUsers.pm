@@ -34,7 +34,20 @@ sub add : Chained('base'): PathPart('add'): Args(0) {
   my ($self, $c) = @_;
 
   if(lc $c->req->method eq 'post'){
-    my 
+    my $params = $c->req->params;
+
+    my $users_rs = $c->stash->{users_rs};
+
+    my $newuser = eval { $users_rs->create({
+      username => $params->{username},
+      email => $params->{email},
+      password => $params->{password},
+    }) };
+    if($@) {
+      $c->log->debug("User tried to sign up with an invalid email address, redoing.. ");
+      $c->stash( errors => { email => 'invalid' }, err => $@);
+      return $c->res->redirect( $c->uri_for( $c->controller('AuthUser')->action_for('profile'), [ $newuser->id ] ) );
+    }
   }
 }
 

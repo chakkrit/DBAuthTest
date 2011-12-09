@@ -16,6 +16,7 @@ use warnings;
 use Moose;
 use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
+use Email::Valid;
 extends 'DBIx::Class::Core';
 
 =head1 COMPONENTS LOADED
@@ -119,6 +120,14 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07012 @ 2011-12-09 09:10:24
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xK9QEQegh8CAIOKp1x3eug
 
+sub new {
+  my ($class, $args) = @_;
+  if( exists $args->{email} && !Email::Valid->address($args->{email})) {
+    die 'Email invalid'
+  }
+
+  return $class->next::method($args);
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
