@@ -10,5 +10,6 @@
         <span>[% user.$col %]</span>
       </div>
     [% END %]
+    [% PROCESS components/roles.tt %]
   </body>
 </html>

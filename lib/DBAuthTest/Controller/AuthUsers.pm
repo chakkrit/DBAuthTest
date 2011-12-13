@@ -24,6 +24,7 @@ Catalyst Controller.
 sub base : Chained('/'): PathPart('authusers'): CaptureArgs(0) {
   my ($self, $c) = @_;
   $c->stash(users_rs => $c->model('AuthDB::User'));
+  $c->stash(roles_rs => $c->model('AuthDB::Role'));
 }
 
 =head2 add
@@ -79,6 +80,44 @@ sub user : Chained('base'): PathPart(''): CaptureArgs(1) {
 sub profile : Chained('user') :PathPart('profile'): Args(0) {
   my ($self, $c) = @_;
 
+}
+
+=head2 edit
+
+=cut
+
+sub edit : Chained('user') :PathPart('edit') :Args(0) {
+  my ($self, $c) = @_;
+
+  if(lc $c->req->method eq 'post') {
+    my $params = $c->req->params;
+    my $user = $c->stash->{user};
+
+    $user->update({
+      email => $params->{email},
+      password => $params->{password},
+    });
+
+    return $c->res->redirect( $c->uri_for(
+      $c->controller('AuthUsers')->action_for('profile'),
+      [$user->id]
+    ));
+  }
+}
+
+=head2 set_roles
+
+=cut
+
+sub set_roles :Chained('user') :PathPart('set_roles') :Args() {
+  my ($self, $c) = @_;
+
+  my $user = $c->stash->{user};
+  if(lc $c->req->method eq 'post') {
+    my @roles = $c->req->param('role');
+    $user->set_all_roles(@roles);
+  }
+  $c->res->redirect($c->uri_for($c->controller()->action_for('profile'), [ $user->id ]));
 }
 
 =head1 AUTHOR

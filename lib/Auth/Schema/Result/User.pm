@@ -130,6 +130,22 @@ sub new {
   return $class->next::method($args);
 }
 
+sub has_role {
+  my ($self, $role) = @_;
+  my $roles = $self->user_roles->find({ role_id => $role->id });
+  return $roles;
+}
+
+sub set_all_roles {
+  my ($self, @roleids) = @_;
+  $self->user_roles->delete;
+  foreach my $role_id (@roleids) {
+    $self->user_roles->create({ role_id => $role_id });
+  }
+  return $self;
+}
+
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;
