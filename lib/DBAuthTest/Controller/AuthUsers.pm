@@ -120,6 +120,17 @@ sub set_roles :Chained('user') :PathPart('set_roles') :Args() {
   $c->res->redirect($c->uri_for($c->controller()->action_for('profile'), [ $user->id ]));
 }
 
+=head2 delete
+
+=cut
+
+sub delete :Chained('user') :PathPart('delete') :Args() {
+  my ( $self, $c ) = @_;
+  my $user = $c->stash->{user};
+  $user->delete();
+  return $c->res->redirect( $c->uri_for('/') );
+}
+
 =head1 AUTHOR
 
 chakkrit,,,

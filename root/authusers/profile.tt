@@ -11,5 +11,6 @@
       </div>
     [% END %]
     [% PROCESS components/roles.tt %]
+    <a href="[% c.uri_for(c.controller('authusers').action_for('delete'), [ user.id ]) %]">Delete Me</a>
   </body>
 </html>
