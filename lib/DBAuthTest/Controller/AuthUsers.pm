@@ -131,6 +131,14 @@ sub delete :Chained('user') :PathPart('delete') :Args() {
   return $c->res->redirect( $c->uri_for('/') );
 }
 
+=head2 list
+
+=cut
+
+sub list :Chained('base') :PathPart('list') :Args(0) {
+  my ($self, $c) = @_;
+}
+
 =head1 AUTHOR
 
 chakkrit,,,

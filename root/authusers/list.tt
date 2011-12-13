@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>All users and their roles</title>
+  </head>
+  <body>
+    <table>
+      <tr><th>UserId</th><th>Username</th><th>Email</th></tr>
+      [% WHILE (user = users_rs.next) %]
+        <tr>
+          <td>[% user.id %]</td>
+          <td>[% user.username %]</td>
+          <td>[% user.email %]</td>
+        </tr>
+      [% END %]
+
+      <tr><th>UserId</th><th>Username</th><th>Email</th><th>Roles</th></tr>
+        <td>
+          <ul>
+          [% FOREACH role = user.user_roles %]
+            <li>[% role.role_id.role %]</li>
+          [% END %]
+          </ul>
+        </td>
+    </table>
+  </body>
+</html>
+
